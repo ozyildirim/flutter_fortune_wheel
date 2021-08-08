@@ -102,6 +102,8 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
   /// {@macro flutter_fortune_wheel.FortuneWidget.onFling}
   final VoidCallback? onFling;
 
+  int afterSpinningValue;
+
   double _getAngle(double progress) {
     return 2 * _math.pi * rotationCount * progress;
   }
@@ -129,6 +131,7 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
     this.onAnimationEnd,
     PanPhysics? physics,
     this.onFling,
+    this.afterSpinningValue = 0,
   })  : physics = physics ?? CircularPanPhysics(),
         assert(items.length > 1),
         super(key: key);
@@ -158,6 +161,7 @@ class FortuneWheel extends HookWidget implements FortuneWidget {
     useEffect(() {
       final subscription = selected.listen((event) {
         selectedIndex.value = event;
+        afterSpinningValue = selectedIndex.value;
         animate();
       });
       return subscription.cancel;
